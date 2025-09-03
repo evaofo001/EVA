@@ -1,27 +1,31 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import Header from './components/Header'
-import CoreStatus from './components/CoreStatus'
-import SystemOverview from './components/SystemOverview'
-import ArchitectureView from './components/ArchitectureView'
+import ChatInterface from './components/ChatInterface'
+import Dashboard from './components/Dashboard'
+import VoiceButton from './components/VoiceButton'
 
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-eva-dark via-gray-900 to-black">
+    <div className="min-h-screen bg-gradient-to-br from-eva-dark via-gray-900 to-black flex flex-col">
       <Header />
       
-      <main className="container mx-auto px-6 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="space-y-8"
-        >
-          <CoreStatus />
-          <SystemOverview />
-          <ArchitectureView />
-        </motion.div>
+      <main className="flex-1 flex overflow-hidden">
+        <div className="flex-1 flex">
+          {/* Chat Section */}
+          <div className="flex-1 flex flex-col">
+            <ChatInterface />
+          </div>
+          
+          {/* Dashboard Section */}
+          <div className="w-80 border-l border-gray-800">
+            <Dashboard />
+          </div>
+        </div>
       </main>
+      
+      {/* Voice Button Footer */}
+      <VoiceButton />
     </div>
   )
 }
