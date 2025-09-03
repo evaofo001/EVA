@@ -1,0 +1,62 @@
+{
+  "sensor_data": {
+    "timestamp": "2025-01-27T16:36:00Z",
+    "system_metrics": {
+      "cpu_usage": 45.2,
+      "memory_usage": 67.8,
+      "disk_usage": 23.1,
+      "network_activity": 12.5,
+      "active_processes": 42,
+      "temperature": 68.5
+    },
+    "user_interactions": {
+      "voice_commands": 3,
+      "chat_messages": 7,
+      "device_controls": 2,
+      "notification_responses": 1,
+      "session_duration": 1847
+    },
+    "environmental_data": {
+      "time_of_day": "afternoon",
+      "user_location": "home",
+      "device_type": "smartphone",
+      "connectivity": "wifi",
+      "battery_level": 78,
+      "ambient_light": 450
+    },
+    "learning_context": {
+      "current_task": "pattern_recognition",
+      "learning_mode": "reinforcement",
+      "confidence_level": 0.82,
+      "exploration_rate": 0.15,
+      "recent_rewards": [0.3, 0.7, 0.2, 0.9, 0.6]
+    }
+  },
+  "policy_constraints": {
+    "safety_level": "high",
+    "user_consent_required": true,
+    "data_privacy_enabled": true,
+    "resource_limits": {
+      "max_cpu": 80,
+      "max_memory": 75,
+      "max_network": 50
+    }
+  },
+  "expected_outputs": {
+    "learning_insights": [
+      "User prefers voice interaction in afternoon",
+      "High engagement with device control features",
+      "Pattern detected: increased activity during home sessions"
+    ],
+    "recommended_actions": [
+      "Optimize voice recognition for current environment",
+      "Prepare device control suggestions",
+      "Cache frequently accessed data"
+    ],
+    "safety_checks": [
+      "All operations within resource limits",
+      "No privacy violations detected",
+      "User consent protocols active"
+    ]
+  }
+}
