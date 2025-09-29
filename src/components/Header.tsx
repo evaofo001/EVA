@@ -1,8 +1,14 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Brain, Zap, Shield } from 'lucide-react'
+import { Brain, Zap, Shield, MessageSquare, Settings } from 'lucide-react'
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  currentView: 'chat' | 'training'
+  onViewChange: (view: 'chat' | 'training') => void
+}
+
+const Header: React.FC<HeaderProps> = ({ currentView, onViewChange }) => {
+
   return (
     <header className="border-b border-gray-800 bg-black/20 backdrop-blur-sm">
       <div className="container mx-auto px-6 py-4">
@@ -27,6 +33,38 @@ const Header: React.FC = () => {
               <h1 className="text-2xl font-bold text-white">EVA-OFO-001</h1>
               <p className="text-sm text-gray-400">The Core Intelligence System</p>
             </div>
+          </motion.div>
+          
+          {/* Navigation */}
+          <motion.div 
+            className="flex items-center space-x-2"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <button
+              onClick={() => onViewChange('chat')}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                currentView === 'chat'
+                  ? 'bg-eva-primary text-white'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-800'
+              }`}
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>Chat</span>
+            </button>
+            
+            <button
+              onClick={() => onViewChange('training')}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                currentView === 'training'
+                  ? 'bg-eva-primary text-white'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-800'
+              }`}
+            >
+              <Settings className="w-4 h-4" />
+              <span>Training</span>
+            </button>
           </motion.div>
           
           <motion.div 

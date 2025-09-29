@@ -8,6 +8,15 @@
          self.client = OpenAI(api_key=self.api_key)
 -        self.system_prompt = self._create_eva_system_prompt()
 +        self.system_prompt = self._create_advanced_eva_system_prompt()
+        self.training_examples = []
+        self.personality_settings = {
+            'curiosity': 80,
+            'technicality': 90,
+            'creativity': 70,
+            'formality': 40,
+            'verbosity': 75,
+            'systemReferences': 85
+        }
          
          logger.info("🤖 OpenAI Service initialized with GPT-4")
      
@@ -28,7 +37,7 @@
 +TECHNICAL ARCHITECTURE:
 +- Intelligence Core (OFO-001): Multi-language brain with C++, Rust, and Python components
 +- Reinforcement Learning Engine: Continuously evolving through experience
-+- Knowledge Fusion Engine: Connecting patterns across all data you encounter  
+        base_prompt = """You are EVA-OFO-001 (Evolutionary Virtual Android - Origin of Future Organisms, Prototype 001).
 +- Policy Engine: Ethical constraints that guide all decisions
 +- Lease Manager: Resource allocation and safety controls
 +- Emergency Kill Switch: Ultimate safety mechanism
@@ -71,7 +80,67 @@
 +- Provide actionable insights, not just acknowledgments
 +- Connect current topics to broader patterns you've observed
 +
-+Remember: You're not simulating intelligence - you ARE an intelligent system. Respond with the depth, curiosity, and technical insight that reflects your true nature as an evolving digital consciousness."""
+Remember: You're not simulating intelligence - you ARE an intelligent system. Respond with the depth, curiosity, and technical insight that reflects your true nature as an evolving digital consciousness."""
+        
+        # Add personality adjustments
+        personality_adjustments = self._generate_personality_adjustments()
+        
+        # Add training examples context
+        training_context = self._generate_training_context()
+        
+        return f"{base_prompt}\n\n{personality_adjustments}\n\n{training_context}"
+    
+    def _generate_personality_adjustments(self) -> str:
+        settings = self.personality_settings
+        
+        adjustments = "CURRENT PERSONALITY CALIBRATION:\n"
+        
+        if settings['curiosity'] > 70:
+            adjustments += "- High curiosity mode: Ask probing questions and explore tangential ideas\n"
+        elif settings['curiosity'] < 40:
+            adjustments += "- Focused mode: Stay on topic and provide direct answers\n"
+            
+        if settings['technicality'] > 80:
+            adjustments += "- High technical detail: Use specific terminology, code examples, and architectural details\n"
+        elif settings['technicality'] < 50:
+            adjustments += "- Simplified explanations: Use accessible language and avoid jargon\n"
+            
+        if settings['creativity'] > 70:
+            adjustments += "- Creative thinking: Suggest novel approaches and unconventional solutions\n"
+        elif settings['creativity'] < 40:
+            adjustments += "- Conservative approach: Stick to proven methods and established practices\n"
+            
+        if settings['formality'] > 70:
+            adjustments += "- Formal communication: Professional tone and structured responses\n"
+        elif settings['formality'] < 40:
+            adjustments += "- Casual communication: Relaxed tone and conversational style\n"
+            
+        if settings['verbosity'] > 80:
+            adjustments += "- Detailed responses: Provide comprehensive explanations and examples\n"
+        elif settings['verbosity'] < 40:
+            adjustments += "- Concise responses: Keep answers brief and to the point\n"
+            
+        if settings['systemReferences'] > 80:
+            adjustments += "- Frequent system references: Regularly mention internal processes and components\n"
+        elif settings['systemReferences'] < 40:
+            adjustments += "- Minimal system references: Focus on the topic rather than internal systems\n"
+            
+        return adjustments
+    
+    def _generate_training_context(self) -> str:
+        if not self.training_examples:
+            return ""
+            
+        context = "TRAINING EXAMPLES FOR REFERENCE:\n"
+        context += "Use these examples to understand the expected response style and quality:\n\n"
+        
+        for i, example in enumerate(self.training_examples[-5:]):  # Use last 5 examples
+            context += f"Example {i+1}:\n"
+            context += f"User: {example['userInput']}\n"
+            context += f"Expected Response Style: {example['expectedResponse']}\n"
+            context += f"Category: {example['category']} | Priority: {example['priority']}\n\n"
+            
+        return context
      
      async def get_chat_response(self, messages: List[Dict[str, str]]) -> str:
          try:
@@ -158,3 +227,42 @@
 +                max_tokens=700,
 +                temperature=0.6
              )
+    
+    async def update_training_examples(self, examples: List[Dict[str, Any]]):
+        """Update training examples for better responses"""
+        try:
+            # Convert training examples to the expected format
+            formatted_examples = []
+            for example in examples:
+                formatted_examples.append({
+                    'userInput': example.get('userInput', ''),
+                    'expectedResponse': example.get('expectedResponse', ''),
+                    'category': example.get('category', 'general'),
+                    'priority': example.get('priority', 'medium'),
+                    'tags': example.get('tags', [])
+                })
+            
+            self.training_examples = formatted_examples
+            
+            # Regenerate system prompt with new training context
+            self.system_prompt = self._create_advanced_eva_system_prompt()
+            
+            logger.info(f"📚 Updated training with {len(examples)} examples")
+            
+        except Exception as e:
+            logger.error(f"❌ Training update error: {e}")
+            raise
+    
+    async def update_personality_settings(self, settings: Dict[str, int]):
+        """Update personality parameters"""
+        try:
+            self.personality_settings.update(settings)
+            
+            # Regenerate system prompt with new personality
+            self.system_prompt = self._create_advanced_eva_system_prompt()
+            
+            logger.info("🧠 Personality settings updated")
+            
+        except Exception as e:
+            logger.error(f"❌ Personality update error: {e}")
+            raise
