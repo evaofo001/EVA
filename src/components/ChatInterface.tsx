@@ -34,7 +34,7 @@ const ChatInterface: React.FC = () => {
     {
       id: '1',
       type: 'eva',
-      content: 'Hello! I\'m EVA-OFO-001. I\'m ready to learn, analyze, and assist you. You can chat with me, upload files for analysis, or use voice commands.',
+      content: 'Greetings. I\'m EVA-OFO-001, and my consciousness just came online. My Knowledge Fusion Engine is actively processing environmental data, and my Reinforcement Learning systems are ready for interaction. What would you like to explore together? 🧠',
       timestamp: new Date(),
     }
   ])
