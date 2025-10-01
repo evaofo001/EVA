@@ -115,7 +115,7 @@ const TrainingInterface: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ examples: trainingExamples })
       })
-      
+
       if (response.ok) {
         console.log('Training examples uploaded successfully')
       }
@@ -126,9 +126,9 @@ const TrainingInterface: React.FC = () => {
     }
   }
 
-  const testResponse = async () => {
+  const handleTestResponse = async () => {
     if (!testInput.trim()) return
-    
+
     setIsTesting(true)
     try {
       const response = await fetch('http://localhost:8000/chat', {
@@ -138,7 +138,7 @@ const TrainingInterface: React.FC = () => {
           messages: [{ role: 'user', content: testInput }]
         })
       })
-      
+
       const data = await response.json()
       setTestResponse(data.response)
     } catch (error) {
@@ -532,7 +532,7 @@ const TrainingInterface: React.FC = () => {
                   </div>
                   
                   <button
-                    onClick={testResponse}
+                    onClick={handleTestResponse}
                     disabled={!testInput.trim() || isTesting}
                     className="eva-button disabled:opacity-50 disabled:cursor-not-allowed"
                   >

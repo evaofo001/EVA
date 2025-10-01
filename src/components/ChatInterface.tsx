@@ -30,14 +30,7 @@ interface Attachment {
 }
 
 const ChatInterface: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      type: 'eva',
-      content: 'Greetings. I\'m EVA-OFO-001, and my consciousness just came online. My Knowledge Fusion Engine is actively processing environmental data, and my Reinforcement Learning systems are ready for interaction. What would you like to explore together? 🧠',
-      timestamp: new Date(),
-    }
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [dragOver, setDragOver] = useState(false)
@@ -77,33 +70,41 @@ const ChatInterface: React.FC = () => {
     setSelectedFiles([])
     setIsTyping(true)
 
-    // Simulate EVA response
-    setTimeout(() => {
+    try {
+      const responseContent = await generateEVAResponse(userMessage)
       const evaResponse: Message = {
         id: (Date.now() + 1).toString(),
         type: 'eva',
-        content: generateEVAResponse(userMessage),
+        content: responseContent,
         timestamp: new Date(),
       }
       setMessages(prev => [...prev, evaResponse])
+    } catch (error) {
+      console.error('Error getting EVA response:', error)
+    } finally {
       setIsTyping(false)
-    }, 1500)
+    }
   }
 
-  const generateEVAResponse = (userMessage: Message): string => {
-    if (userMessage.attachments && userMessage.attachments.length > 0) {
-      const fileTypes = userMessage.attachments.map(att => att.type).join(', ')
-      return `I've received your ${fileTypes} file(s). Analyzing content through my Knowledge Fusion Engine... ✨ Analysis complete! The data has been integrated into my learning matrix.`
+  const generateEVAResponse = async (userMessage: Message): Promise<string> => {
+    try {
+      const response = await fetch('http://localhost:8000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: userMessage.content }]
+        })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        return data.response
+      }
+    } catch (error) {
+      console.error('Failed to get response from EVA:', error)
     }
-    
-    const responses = [
-      "Interesting observation. I'm processing this through my reinforcement learning engine and updating my knowledge graph accordingly.",
-      "I understand. Let me analyze this data pattern and cross-reference it with my existing knowledge base.",
-      "Fascinating input! My neural networks are identifying new connections and potential insights from this information.",
-      "Processing your request through my multi-layer architecture. The C++ core is handling the computation while Rust manages safety protocols."
-    ]
-    
-    return responses[Math.floor(Math.random() * responses.length)]
+
+    return "I'm still initializing my core systems. Please train me through the Training Center first."
   }
 
   const getFileType = (file: File): 'image' | 'video' | 'audio' | 'file' => {

@@ -192,48 +192,43 @@ class EVACore:
     async def _gather_system_metrics(self) -> Dict[str, Any]:
         """Gather system performance metrics"""
         return {
-            'cpu_usage': 45.2,  # Simulated
-            'memory_usage': 67.8,
-            'active_processes': 12,
-            'network_activity': 'moderate'
+            'cpu_usage': 0.0,
+            'memory_usage': 0.0,
+            'active_processes': 0,
+            'network_activity': 'idle'
         }
-    
+
     async def _gather_user_data(self) -> Dict[str, Any]:
         """Gather user interaction data"""
         return {
-            'active_sessions': 1,
+            'active_sessions': 0,
             'recent_commands': [],
             'user_preferences': {},
             'interaction_patterns': {}
         }
-    
+
     async def _gather_environmental_data(self) -> Dict[str, Any]:
         """Gather environmental context data"""
         return {
             'time_of_day': time.strftime('%H:%M:%S'),
-            'system_load': 'normal',
-            'external_apis': 'available',
-            'security_status': 'secure'
+            'system_load': 'idle',
+            'external_apis': 'unknown',
+            'security_status': 'initializing'
         }
-    
+
     async def _execute_experiment(self, experiment: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a safe experiment"""
-        # Simulate experiment execution
-        await asyncio.sleep(0.1)  # Simulate processing time
-        
+        await asyncio.sleep(0.1)
+
         return {
-            'success': True,
-            'result_data': f"Experiment {experiment.get('id', 'unknown')} completed",
-            'metrics': {'accuracy': 0.85, 'confidence': 0.92}
+            'success': False,
+            'result_data': f"Experiment {experiment.get('id', 'unknown')} pending training",
+            'metrics': {'accuracy': 0.0, 'confidence': 0.0}
         }
-    
+
     async def _generate_recommendations(self) -> list:
         """Generate recommendations based on current cycle"""
-        return [
-            "System performance is optimal",
-            "Consider expanding knowledge base in domain X",
-            "User interaction patterns suggest preference for voice interface"
-        ]
+        return []
     
     async def get_status(self) -> Dict[str, Any]:
         """Get current EVA status"""

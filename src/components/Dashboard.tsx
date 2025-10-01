@@ -13,21 +13,40 @@ import {
 } from 'lucide-react'
 
 const Dashboard: React.FC = () => {
-  const systemStatus = {
-    online: true,
-    connectedUnits: 3,
-    batteryLevel: 87,
-    cpuUsage: 45,
-    memoryUsage: 67,
-    networkStatus: 'stable'
-  }
+  const [systemStatus, setSystemStatus] = React.useState({
+    online: false,
+    connectedUnits: 0,
+    batteryLevel: 0,
+    cpuUsage: 0,
+    memoryUsage: 0,
+    networkStatus: 'initializing'
+  })
 
-  const coreModules = [
-    { name: 'Lease Manager', status: 'active', language: 'Rust', load: 23 },
-    { name: 'Policy Engine', status: 'active', language: 'C++', load: 45 },
-    { name: 'Knowledge Fusion', status: 'learning', language: 'Python', load: 78 },
-    { name: 'RL Engine', status: 'evolving', language: 'C++', load: 92 },
-  ]
+  const [coreModules, setCoreModules] = React.useState([
+    { name: 'Lease Manager', status: 'idle', language: 'Rust', load: 0 },
+    { name: 'Policy Engine', status: 'idle', language: 'C++', load: 0 },
+    { name: 'Knowledge Fusion', status: 'idle', language: 'Python', load: 0 },
+    { name: 'RL Engine', status: 'idle', language: 'C++', load: 0 },
+  ])
+
+  React.useEffect(() => {
+    const fetchSystemStatus = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/status')
+        if (response.ok) {
+          const data = await response.json()
+          setSystemStatus(data.system || systemStatus)
+          setCoreModules(data.modules || coreModules)
+        }
+      } catch (error) {
+        console.error('Failed to fetch system status:', error)
+      }
+    }
+
+    fetchSystemStatus()
+    const interval = setInterval(fetchSystemStatus, 5000)
+    return () => clearInterval(interval)
+  }, [])
 
   const getStatusColor = (status: string) => {
     switch (status) {
