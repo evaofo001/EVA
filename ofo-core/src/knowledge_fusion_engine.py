@@ -304,7 +304,7 @@ class KnowledgeFusionEngine:
     
     async def is_ready(self) -> bool:
         """Check if knowledge fusion engine is ready"""
-        return len(self.policies) > 0
+        return len(self.knowledge_graph) > 0
     
     async def shutdown(self):
         """Shutdown knowledge fusion engine"""

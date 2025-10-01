@@ -88,16 +88,33 @@ const ChatInterface: React.FC = () => {
 
   const generateEVAResponse = async (userMessage: Message): Promise<string> => {
     try {
+      const conversationId = sessionStorage.getItem('eva_conversation_id')
+
       const response = await fetch('http://localhost:8000/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: [{ role: 'user', content: userMessage.content }]
+          messages: [{ role: 'user', content: userMessage.content }],
+          conversation_id: conversationId,
+          use_memory: true
         })
       })
 
       if (response.ok) {
         const data = await response.json()
+
+        if (data.conversation_id && data.conversation_id !== 'temp') {
+          sessionStorage.setItem('eva_conversation_id', data.conversation_id)
+        }
+
+        if (data.context_analysis) {
+          console.log('Context Analysis:', data.context_analysis)
+        }
+
+        if (data.relevant_knowledge && data.relevant_knowledge.length > 0) {
+          console.log('Relevant Knowledge:', data.relevant_knowledge)
+        }
+
         return data.response
       }
     } catch (error) {

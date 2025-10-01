@@ -204,15 +204,16 @@ class PolicyEngine:
     
     async def _record_violation(self, policy: Policy, lease_type, permissions):
         """Record a policy violation"""
+        import time
         violation = {
             'timestamp': time.time(),
             'policy_id': policy.id,
             'policy_name': policy.name,
-            'lease_type': lease_type.value,
+            'lease_type': lease_type.value if hasattr(lease_type, 'value') else str(lease_type),
             'permissions': permissions,
             'severity': policy.level.value
         }
-        
+
         self.policy_violations.append(violation)
         logger.warning(f"📋 Policy violation recorded: {policy.name}")
     
